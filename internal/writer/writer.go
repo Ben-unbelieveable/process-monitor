@@ -11,6 +11,7 @@ import (
 	"strconv"
 
 	"github.com/liubo/process-monitor/internal/models"
+	"github.com/liubo/process-monitor/internal/version"
 )
 
 // StatsWriter 将 ProcessStats 写入屏幕或文件。
@@ -48,6 +49,9 @@ func (w *StatsWriter) init() error {
 	if !w.firstWrite {
 		return nil
 	}
+	if err := w.writeMetaHeader(); err != nil {
+		return err
+	}
 	switch w.format {
 	case "json":
 		// JSON Lines：每行一个 JSON 对象
@@ -72,6 +76,23 @@ func (w *StatsWriter) init() error {
 		return fmt.Errorf("不支持的格式: %s", w.format)
 	}
 	w.firstWrite = false
+	return nil
+}
+
+// writeMetaHeader 在统计输出开头写入版本、编译日期与仓库信息。
+func (w *StatsWriter) writeMetaHeader() error {
+	switch w.format {
+	case "json":
+		if _, err := fmt.Fprintf(w.out, "%s\n", version.MetaJSON()); err != nil {
+			return err
+		}
+	default:
+		for _, line := range version.HeaderLines() {
+			if _, err := io.WriteString(w.out, line+"\n"); err != nil {
+				return err
+			}
+		}
+	}
 	return nil
 }
 

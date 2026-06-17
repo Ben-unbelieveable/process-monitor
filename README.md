@@ -2,6 +2,10 @@
 
 跨平台进程资源监控工具，用于 ML/DL 训练和预测过程中的 CPU/GPU/内存追踪。
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
+仓库：https://github.com/Ben-unbelieveable/process-monitor
+
 ## 构建
 
 ```bash
@@ -70,3 +74,7 @@ go build -o bin/monitor ./cmd/monitor
 
 - 容器感知完整支持 **Linux**；macOS 显示宿主机
 - NVIDIA GPU 需要 `nvidia-smi`
+
+## License
+
+[MIT](LICENSE)

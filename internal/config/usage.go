@@ -7,12 +7,15 @@ import (
 	"os"
 	"strings"
 	"text/tabwriter"
+
+	"github.com/liubo/process-monitor/internal/version"
 )
 
 // printUsage 按功能分组输出帮助信息。
 func printUsage(fs *flag.FlagSet) {
 	w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
-	fmt.Fprintf(w, "Process Monitor — 进程资源监控工具\n\n")
+	fmt.Fprintf(w, "Process Monitor — 进程资源监控工具\n")
+	fmt.Fprintf(w, "%s\n\n", version.Banner())
 	fmt.Fprintf(w, "用法:\n  %s [选项]\n\n", fs.Name())
 
 	writeSection(w, "监控目标", "（-p / -n / -a 三选一；均未指定则自动模式）", [][]string{

@@ -2,18 +2,23 @@
 APP      := monitor
 CMD      := ./cmd/monitor
 BIN_DIR  := bin
-LDFLAGS  := -s -w
+VERSION  ?= $(shell git describe --tags --always --dirty 2>/dev/null || echo dev)
+BUILD_DATE ?= $(shell date -u +%Y-%m-%d)
+REPO     ?= https://github.com/Ben-unbelieveable/process-monitor
 
-# 目标平台：darwin arm64/amd64，linux arm64/amd64
+LDFLAGS  := -s -w \
+	-X github.com/liubo/process-monitor/internal/version.Version=$(VERSION) \
+	-X github.com/liubo/process-monitor/internal/version.BuildDate=$(BUILD_DATE) \
+	-X github.com/liubo/process-monitor/internal/version.Repository=$(REPO)
+
 PLATFORMS := \
 	darwin/arm64 \
 	darwin/amd64 \
 	linux/arm64 \
 	linux/amd64
 
-.PHONY: all build clean
+.PHONY: all build local clean
 
-# 默认：交叉编译全部平台
 all: build
 
 build:
@@ -22,10 +27,14 @@ build:
 		os=$${platform%/*}; \
 		arch=$${platform#*/}; \
 		out=$(BIN_DIR)/$(APP)-$$os-$$arch; \
-		echo "==> building $$out ($$os/$$arch)"; \
+		echo "==> building $$out ($$os/$$arch) $(VERSION)"; \
 		GOOS=$$os GOARCH=$$arch CGO_ENABLED=0 go build -ldflags "$(LDFLAGS)" -o $$out $(CMD); \
 	done
 	@echo "done: $(BIN_DIR)/$(APP)-{darwin,linux}-{arm64,amd64}"
+
+local:
+	@mkdir -p $(BIN_DIR)
+	go build -ldflags "$(LDFLAGS)" -o $(BIN_DIR)/$(APP) $(CMD)
 
 clean:
 	rm -rf $(BIN_DIR)
