@@ -16,11 +16,12 @@ import (
 
 // StatsWriter 将 ProcessStats 写入屏幕或文件。
 type StatsWriter struct {
-	out        io.Writer
-	format     string
-	file       *os.File
-	csvWriter  *csv.Writer
-	firstWrite bool
+	out         io.Writer
+	format      string
+	file        *os.File
+	csvWriter   *csv.Writer
+	metaWritten bool
+	firstWrite  bool
 }
 
 // New 创建 StatsWriter。output 为空或 "-" 时输出到 stdout。
@@ -45,12 +46,24 @@ func New(output, format string) (*StatsWriter, error) {
 	return w, nil
 }
 
-func (w *StatsWriter) init() error {
-	if !w.firstWrite {
+// WriteVersionHeader 在统计输出最前面写入版本、编译日期与仓库信息（仅一次）。
+func (w *StatsWriter) WriteVersionHeader() error {
+	if w.metaWritten {
 		return nil
 	}
 	if err := w.writeMetaHeader(); err != nil {
 		return err
+	}
+	w.metaWritten = true
+	if w.file != nil {
+		return w.file.Sync()
+	}
+	return nil
+}
+
+func (w *StatsWriter) init() error {
+	if !w.firstWrite {
+		return nil
 	}
 	switch w.format {
 	case "json":

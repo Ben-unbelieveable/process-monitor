@@ -16,15 +16,22 @@ import (
 // Run 启动监控主循环，直到 stop 收到停止信号。
 func Run(cfg *config.Config, stop <-chan struct{}) (alerted bool, err error) {
 	initRuntimeEnv()
-	printHardwareInfo(cfg)
-	printContainerInfo(cfg)
-	printStartupInfo(cfg)
 
 	w, err := writer.New(cfg.OutputPath, cfg.OutputFormat)
 	if err != nil {
 		return false, fmt.Errorf("初始化输出: %w", err)
 	}
 	defer w.Close()
+	if err := w.WriteVersionHeader(); err != nil {
+		return false, fmt.Errorf("写入版本信息: %w", err)
+	}
+	if !cfg.OutputToStdout() {
+		printVersionInfo()
+	}
+
+	printHardwareInfo(cfg)
+	printContainerInfo(cfg)
+	printStartupInfo(cfg)
 
 	alerter := NewAlerter(cfg)
 	interval := time.Duration(cfg.Interval * float64(time.Second))
