@@ -1,0 +1,20 @@
+# 可选配置文件（-c / --config config.yaml）
+
+interval: 30
+output_format: text
+gpu_type: both
+memory_threshold_gb: 1.0
+tree: false
+
+# 监控范围: auto | host | container（等同 -s）
+scope: auto
+
+target_pids: []
+target_names: []
+target_cmdlines: []
+
+alert_cpu_percent: 0
+alert_mem_gb: 0
+alert_gpu_mem_mb: 0
+alert_container_mem_pct: 0
+alert_exit: false

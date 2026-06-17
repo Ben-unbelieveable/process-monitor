@@ -1,0 +1,7 @@
+timestamp,pid,process_name,cpu_percent,memory_gb,gpu_memory_mb,gpu_utilization,gpu_name
+2026-04-29 10:28:31,37886,python3.13,19.20,0.325,0.00,0.0,Apple Silicon GPU
+2026-04-29 10:28:36,37886,python3.13,91.10,0.309,0.00,0.0,Apple Silicon GPU
+2026-04-29 10:28:41,37886,python3.13,18.70,0.323,0.00,0.0,Apple Silicon GPU
+2026-04-29 10:28:47,37886,python3.13,5.00,0.315,0.00,0.0,Apple Silicon GPU
+2026-04-29 10:28:52,37886,python3.13,0.10,0.326,0.00,0.0,Apple Silicon GPU
+2026-04-29 10:28:57,37886,python3.13,0.00,0.317,0.00,0.0,Apple Silicon GPU

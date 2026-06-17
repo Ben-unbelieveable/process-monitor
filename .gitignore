@@ -1,0 +1,8 @@
+/bin/
+/bin/monitor
+/bin/monitor-*
+__pycache__/
+*.pyc
+*.exe
+*.test
+*.out
